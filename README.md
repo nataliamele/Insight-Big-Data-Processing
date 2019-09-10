@@ -4,15 +4,24 @@ project ideas
 
 # Idea 1 
 ### Concept 
-Implement piplene for streaming data for Internet Service hosted on EC2 (health device,sensors, game data, social media) Insure stable scalable architecture and low latency responce. Capture streaming metrics in real time and run intensive analytics. Inroduce loadbalancing and autoscale environment based on load. Integrate with a managed NoSQL database
+Some abstrasct Internet Service which is hosted on EC2. Has users in diffenrent regions.
+This service takes huge amounts of stream data. Examples:
+- self driving cars
+- sensors (fitbit, health devices)
+- game data
+- social media (tweets)
+
+Company wants to capture streaming metrics in real time and run intensive analytics  to be able to present results on dashboard immidiately. 
+Company's goal for the rachitecture to have stable and scalable architecture to process big amounts of data and guarantee low latency responce for customers
 
 ### Biz goals 
 1) Efficienct use of the cloud resources
 2) Low latency responce to all customers
-3) Intruduce uptime/downtime is loss of players
+3) Fault tolerancy 24/7 uptime
 
 ### Tech requirements 
 1) Dynamically scale up or down based on activity of a service 
+2) Implement loadbalancing layer
 2) Connect to Amazon RDS/Postgres service to manage user profiles and state
 3) Store service activity in a Timestream service for future analysis
 4) As the system scales, ensure that data is not lost due to processing backlogs
@@ -20,5 +29,6 @@ Implement piplene for streaming data for Internet Service hosted on EC2 (health 
 
 ***
 
-# Idea 1 
+# Idea 2 
 ### Concept 
+
