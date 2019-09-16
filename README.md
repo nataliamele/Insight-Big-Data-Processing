@@ -4,6 +4,8 @@ Insight-DE-project
 ***
 Track sensors data from facilities and receive notification for emergent cases.
 
+|  Project 1 | Sensor data Monitoring |
+
 ### Tech Stack
 - Data Storage: S3 /contains dataset 
 - Kafka for streaming data
@@ -12,8 +14,7 @@ Track sensors data from facilities and receive notification for emergent cases.
  
 
 ### Data Source
-- Streaming data. Data set ?
-- simulated log data - JSON 
+- Real-time environmental data, air quality and image processing data from city of Chicago: https://api.arrayofthings.org/. API(1000 calls/
 
 ### Engineering Challenge
 - 
