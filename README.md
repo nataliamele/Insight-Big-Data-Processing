@@ -1,17 +1,15 @@
-## Insight-DE-project
+Insight-DE-project
 
-_Project idea 1_
+### Project 1 # Sensor data Monitoring  
 ***
-
-### Sensor data Monitoring  
-_Project Idea/Business Value_
+Track sensors data from facilities and receive notification for emergent cases.
 
 ### Tech Stack
 - Data Storage: S3 /contains dataset 
 - Kafka for streaming data
 - Kafka Connect. To S3 
 - Spark for data capture and analyses 
-- 
+ 
 
 ### Data Source
 - Streaming data. Data set ?
@@ -25,7 +23,18 @@ _Project Idea/Business Value_
 - Implement 
 
 
-_Project idea 2_
+### Project 2 #  
 ***
+High demand service migration to AWS with improvement of analytics
+### Tech Stack
+- MySQL with static data and MongoDB logs 
+- Airflow to schedule data migration steps and validate consistensy 
+- RDS 
+### Data Source
+- MySQL data
+- JSON log data/ MongoDB
 
-###
+
+### Project 3 #  
+***
+Track sensors data from facilities and receive notification for emergent cases.
