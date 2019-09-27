@@ -15,7 +15,7 @@ observations_table_create = ("CREATE TABLE IF NOT EXISTS observation (\
                                 value_hrf FLOAT
                             );")
 
-#Dimensions tables - nodes and sensors:
+# Dimensions tables - sensors and nodes
 
 sensors_table_create = ("CREATE TABLE IF NOT EXISTS sensors (\
                           sensor_path TEXT PRIMARY KEY, \
