@@ -32,8 +32,8 @@ try:
     inserted = 0
 
     # Connect to DB
-    # conn = psycopg2.connect(host="10.0.0.", port="5342" database="db-insight", user="pgadmin", password="n*tAdmin85")
-    # cur = conn.cursor()
+    conn = psycopg2.connect(host="10.0.0.4", port="5342", database="aotdb", user="pgadmin", password="n*tAdmin85")
+    cur = conn.cursor()
 
     # Get observations
     observations = client.list_observations(filters=f)
@@ -69,19 +69,19 @@ finally:
 
 print(f'Inserted {inserted} records total')
 
-def main():
-    """
-    Description: main function is executed first when script api.py is lunched.
-    Establishes and closes connection to database,
-
-    Arguments:
-        None
-
-    Returns:
-        None
-    """
-    conn = psycopg2.connect(host="10.0.0.4", port="5342", database="aotdb", user="pgadmin", password="n*tAdmin85")
-    cur = conn.cursor()
+# def main():
+#     """
+#     Description: main function is executed first when script api.py is lunched.
+#     Establishes and closes connection to database,
+#
+#     Arguments:
+#         None
+#
+#     Returns:
+#         None
+#     """
+#     conn = psycopg2.connect(host="10.0.0.4", port="5342", database="aotdb", user="pgadmin", password="n*tAdmin85")
+#     cur = conn.cursor()
     # conn.close()
 
 
