@@ -4,7 +4,7 @@ from sql_queries import create_table_queries, drop_table_queries
 
 def create_database():
     # Connect to existing database
-    conn = psycopg2.connect("host=10.0.0.4 dbname=aotdb user= password=")
+    conn = psycopg2.connect(host="10.0.0.4", port="5342" database="aotdb", user="pgadmin", password="n*tAdmin85")
     conn.set_session(autocommit=True)
     cur = conn.cursor()
 
