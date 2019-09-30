@@ -8,11 +8,11 @@ sensors_table_drop = "DROP TABLE IF EXISTS sensors;"
 
 # Fact table - streaming data from sensors
 observations_table_create = ("CREATE TABLE IF NOT EXISTS observations (\
-                                record_id SERIAL NOT NULL PRIMARY KEY, \
+                                record_id SERIAL NOT NULL constraint observations_pk PRIMARY KEY, \
                                 ts INT NOT NULL, \
                                 sensor_path TEXT NOT NULL, \
-                                value_hrf FLOAT
-                            );")
+                                value_hrf FLOAT \
+                            ); ALTER TABLE observations OWNER TO pgadmin; ")
 # (
 #  id serial not null
 #   constraint observations_pk
@@ -22,7 +22,6 @@ observations_table_create = ("CREATE TABLE IF NOT EXISTS observations (\
 #  value double precision
 # );
 
-alter table observations owner to postgres;
 # Dimensions tables - sensors and nodes
 #
 # sensors_table_create = ("CREATE TABLE IF NOT EXISTS sensors (\
@@ -59,6 +58,6 @@ nodes_table_insert = ("INSERT INTO nodes(node_id, lat, lon, community_area, desc
                     ON CONFLICT (node_id) DO NOTHING;")
 
 # QUERIES LISTS
-
-create_table_queries = [observations_table_create, sensors_table_create, nodes_table_create]
-drop_table_queries = [observations_table_drop, sensors_table_drop, nodes_table_drop]
+create_table_queries = [observations_table_create]
+# create_table_queries = [observations_table_create, sensors_table_create, nodes_table_create]
+drop_table_queries = [observations_table_drop]#, sensors_table_drop, nodes_table_drop]
