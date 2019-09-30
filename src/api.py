@@ -80,7 +80,7 @@ def main():
     Returns:
         None
     """
-    conn = psycopg2.connect(host="10.0.0.4", port="5342" database="aotdb", user="pgadmin", password="n*tAdmin85")
+    conn = psycopg2.connect(host="10.0.0.4", port="5342", database="aotdb", user="pgadmin", password="n*tAdmin85")
     cur = conn.cursor()
     # conn.close()
 
