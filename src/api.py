@@ -85,5 +85,5 @@ print(f'Inserted {inserted} records total')
     # conn.close()
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
