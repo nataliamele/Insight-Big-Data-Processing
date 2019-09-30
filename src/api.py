@@ -26,7 +26,7 @@ f &= ('order', 'asc:timestamp')
 
 # # Prepare insert statement
 # sql = observations_table_insert
-
+observations_table_insert = "INSERT INTO aotdb.observations (ts, sensor_path, value_hrf) VALUES (%s,%s,%s)"
 try:
     page_num = 1
     inserted = 0
