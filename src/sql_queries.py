@@ -48,8 +48,7 @@ observations_table_create = ("CREATE TABLE IF NOT EXISTS observations (\
 #                     VALUES (%s, %s, %s, %s, %s)")
 
 observations_table_insert = ("INSERT INTO observsations( \
-                    ts, sensor_path, value_hrf) \
-                    VALUES (%s, %s, %s)")
+                    ts, sensor_path, value_hrf) VALUES (%s, %s, %s)")
 
 sensors_table_insert = ("INSERT INTO sensors(sensors_path, sensor_type, sensor_measure, hrf_unit, hrf_min, hrf_max) \
                     VALUES (%s, %s, %s, %s, %s, %s)")

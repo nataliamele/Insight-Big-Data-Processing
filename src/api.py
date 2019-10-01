@@ -25,8 +25,8 @@ f &= ('timestamp', 'gt', prev_record_timestamp)
 f &= ('order', 'asc:timestamp')
 
 # # Prepare insert statement
-# sql = observations_table_insert
-observations_table_insert = "INSERT INTO aotdb.observations (ts, sensor_path, value_hrf) VALUES (%s,%s,%s)"
+sql = observations_table_insert
+# observations_table_insert = "INSERT INTO aotdb.observations (ts, sensor_path, value_hrf) VALUES (%s,%s,%s)"
 try:
     page_num = 1
     inserted = 0
@@ -46,7 +46,7 @@ try:
             ts = ciso8601.parse_datetime(obs["timestamp"])
             prev_record_timestamp = obs["timestamp"]
 
-            to_insert.append((time.mktime(ts.timetuple()), obs["sensor_path"], obs["value_hrf"]))
+            to_insert.append((time.mktime(ts.timetuple()), obs["sensor_path"], obs["value"]))
 
         # If this array is empty it means that we skipped all the records
         if len(to_insert) == 0:
