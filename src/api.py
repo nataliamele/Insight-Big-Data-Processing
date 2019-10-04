@@ -23,7 +23,7 @@ f = F('project', 'chicago')
 f &= ('size', '5000')
 f &= ('timestamp', 'gt', prev_record_timestamp)
 f &= ('order', 'asc:timestamp')
-f &= ('node_id’, 'abc’)
+f &= ('node_id’, 'abc')
 
 # # Prepare insert statement
 # sql = observations_table_insert
