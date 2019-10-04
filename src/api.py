@@ -23,7 +23,6 @@ f = F('project', 'chicago')
 f &= ('size', '5000')
 f &= ('timestamp', 'gt', prev_record_timestamp)
 f &= ('order', 'asc:timestamp')
-f &= ('node_id’, 'abc')
 
 # # Prepare insert statement
 # sql = observations_table_insert
@@ -47,7 +46,7 @@ try:
             ts = ciso8601.parse_datetime(obs["timestamp"])
             prev_record_timestamp = obs["timestamp"]
 
-            to_insert.append((time.mktime(ts.timetuple()), obs["node_id"], obs["sensor_path"], obs["value"]))
+            to_insert.append((time.mktime(ts.timetuple()), obs["node_vsn"], obs["sensor_path"], obs["value"]))
 
         # If this array is empty it means that we skipped all the records
         if len(to_insert) == 0:
