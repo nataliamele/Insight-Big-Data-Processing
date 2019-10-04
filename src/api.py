@@ -26,7 +26,7 @@ f &= ('order', 'asc:timestamp')
 
 # # Prepare insert statement
 # sql = observations_table_insert
-observations_table_insert = "INSERT INTO public.observations (ts, node_id, sensor_path, value_hrf) VALUES (%s,%s,%s)"
+observations_table_insert = "INSERT INTO public.observations (ts, node_id, sensor_path, value_hrf) VALUES (%s,%s,%s,%s)"
 try:
     page_num = 1
     inserted = 0
