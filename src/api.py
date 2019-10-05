@@ -1,3 +1,5 @@
+# coding=utf8
+
 from aot_client import AotClient, F
 import psycopg2
 import ciso8601
