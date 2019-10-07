@@ -19,12 +19,6 @@ producer = KafkaProducer(bootstrap_servers=brokers, \
 # Initialize AoT client
 client = AotClient()
 
-# Initialize filter (city- Chicago, 5000 records, timestamp, order by timestamp)
-f = F('project', 'chicago')
-f &= ('size', '5000')
-f &= ('timestamp', 'gt', prev_record_timestamp)
-f &= ('order', 'asc:timestamp')
-
 # Get previous record timestamp
 try:
     fh = open("state.txt", "r")
@@ -34,6 +28,12 @@ try:
 except FileNotFoundError:
     t = (datetime.datetime.utcnow() - datetime.timedelta(minutes=15))
     prev_record_timestamp = t.isoformat()[0:19]
+
+# Initialize filter (city- Chicago, 5000 records, timestamp, order by timestamp)
+f = F('project', 'chicago')
+f &= ('size', '5000')
+f &= ('timestamp', 'gt', prev_record_timestamp)
+f &= ('order', 'asc:timestamp')
 
 # Get observations from AoT
 observations = client.list_observations(filters=f)
