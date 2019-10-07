@@ -44,10 +44,10 @@ for page in observations:
         ts = ciso8601.parse_datetime(obs["timestamp"])
         prev_record_timestamp = obs["timestamp"]
         data_stream = {
-                        'ts': time.mktime(ts.timetuple()), \
+                        'ts': time.mktime(ts.timetuple()),\
                         'node_id': obs["node_vsn"],\
                         'sensor_path': obs["sensor_path"],\
-                        'value_hrf': obs["value_hrf"])
+                        'value_hrf': obs["value_hrf"])\
                         }
         producer.send(topic, value=data_stream)
 
