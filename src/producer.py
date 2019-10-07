@@ -47,7 +47,7 @@ for page in observations:
                         'ts': time.mktime(ts.timetuple()),\
                         'node_id': obs["node_vsn"],\
                         'sensor_path': obs["sensor_path"],\
-                        'value_hrf': obs["value_hrf"]\
+                        'value_hrf': obs["value"]\
                         }
         producer.send(topic, value=data_stream)
 
