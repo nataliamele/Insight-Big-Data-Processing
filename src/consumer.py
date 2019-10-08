@@ -3,15 +3,6 @@
 Reads Producer's data, filter and store to db
 '''
 
-"""
-This PySpark logic consumes electroencephalography (EEG) data from Kafka, and compute 
-an "abnormality activity indicator" for every subject and channel on a sliding time window.
-The abnormality activity indicator logic has been adapted from Ocak, Exp System Appl 2009.
-Author:
-David Lee, Insight Data Engineering Fellow, New York City 2019
-"""
-
-
 from pyspark.sql import Row, SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
