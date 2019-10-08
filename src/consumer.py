@@ -4,7 +4,6 @@ Reads Producer's data, filters and stores to db
 '''
 
 import os
-import ciso8601
 #    Spark
 from pyspark import SparkContext
 from pyspark.sql import SparkSession
@@ -18,7 +17,7 @@ from pyspark.streaming.kafka import KafkaUtils
 #    json parsing
 import json
 
-from sqlalchemy import create_engine
+# from sqlalchemy import create_engine
 import psycopg2
 from sql_queries import *
 
@@ -38,12 +37,12 @@ ssc.checkpoint('home/ubuntu/batch/sensor-data/')
 sensor_data = KafkaUtils.createStream(\
                                     ssc, \
                                     kafka_brokers, \
-                                    'spark-streaming', {'sensors-data':2})
+                                    'spark-streaming', {'sensors-data':3})
 
 #   Parse JSON from inbound DStream
 
 # parsed_observation = kafkaStream.map(lambda v: json.loads(v[1]))
-parsed_observation = json.loads(kafkaStream)
+parsed_observation = json.loads(sensor_data)
 
 # Stdout number of records
 parsed_observation.count().map(lambda x:'records in this batch: %s' % x).pprint()
@@ -107,4 +106,4 @@ if __name__ == "__main__":
     # db_IP = os.environ.get("DB_IP")
     # db_user = os.environ.get("DB_USER")
     # db_pwd = os.environ.get("DB_PWD")
-    # kafka_brokers = ['10.0.0.7:9092','10.0.0.9:9092','10.0.0.11:9092']
+    kafka_brokers = ['10.0.0.7:9092','10.0.0.9:9092','10.0.0.11:9092']
