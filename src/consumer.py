@@ -61,7 +61,7 @@ if __name__ == "__main__":
         "parsed_value.ts",\
         "parsed_value.node_id",\
         "parsed_value.sensor_path",\
-        "parsed_value.value_hrf",\
+        "parsed_value.value_hrf"\
         )
 
     print("observed_data_parsed",df_parsed)
