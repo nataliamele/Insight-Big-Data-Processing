@@ -6,6 +6,9 @@ Everybody is familiar with health monitoring devices like fitbit. Imagine Health
 This project will empower people to make decisions to improve their own health and make cities more livable and eventually save costs in medical supplies/treatment.
 
 ### Tech Stack
+
+![schema](./img/pipeline.png)
+
 - Data Storage: S3
 - Data Base: Postgres 
 - Kafka for streaming data
