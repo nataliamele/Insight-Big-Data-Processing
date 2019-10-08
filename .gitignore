@@ -4,3 +4,4 @@
 *.txt
 # Ignore files related to API keys
 .env
+set_environment.py
