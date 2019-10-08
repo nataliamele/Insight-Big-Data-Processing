@@ -43,9 +43,9 @@ if __name__ == "__main__":
         .option("kafka.bootstrap.servers",
                 "10.0.0.7:9092,10.0.0.9:9092,10.0.0.11:9092") \
         .option("subscribe", "sensors-data") \
-        .load()
+        .load() \
+        .select(from_json(col("value").cast("string"), dfSchema).alias("parsed_value"))
     
-    dfstream.select(from_json(col("value").cast("string"), dfSchema).alias("parsed_value"))
     dfstream.printSchema()
 
     # dfstream_str = dfstream.selectExpr("CAST(value AS STRING)")
@@ -61,7 +61,8 @@ if __name__ == "__main__":
         "parsed_value.ts",\
         "parsed_value.node_id",\
         "parsed_value.sensor_path",\
-        "parsed_value.value_hrf")
+        "parsed_value.value_hrf",\
+        )
 
     print("observed_data_parsed",df_parsed)
     # DataFrame[ts: timestamp, node_id: string, sensor_path: string, value_hrf: float])
