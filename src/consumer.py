@@ -13,7 +13,7 @@ import numpy as np
 import os
 
 # foreachBatch write sink; helper function for writing streaming dataFrames
-def postgres_batch_analyzed(df:
+def postgres_batch_analyzed(df):
     df.write.jdbc(
         url="jdbc:postgresql://10.0.0.4:5342/aotdb",
         table="observations",
