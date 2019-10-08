@@ -29,9 +29,9 @@ except FileNotFoundError:
     t = (datetime.datetime.utcnow() - datetime.timedelta(minutes=15))
     prev_record_timestamp = t.isoformat()[0:19]
 
-# Initialize filter (city- Chicago, 5000 records, timestamp, order by timestamp)
+# Initialize filter (city- Chicago, 1000 records, timestamp, order by timestamp)
 f = F('project', 'chicago')
-f &= ('size', '5000')
+f &= ('size', '1000')
 f &= ('timestamp', 'gt', prev_record_timestamp)
 f &= ('order', 'asc:timestamp')
 
@@ -39,17 +39,18 @@ f &= ('order', 'asc:timestamp')
 observations = client.list_observations(filters=f)
 # Iterate through records
 for page in observations:
-    # data_stream = []
+    data_stream = []
     for obs in page.data:
         ts = ciso8601.parse_datetime(obs["timestamp"])
         prev_record_timestamp = obs["timestamp"]
-        data_stream = {
+        obs_stream = {
                         'ts': time.mktime(ts.timetuple()),\
                         'node_id': obs["node_vsn"],\
                         'sensor_path': obs["sensor_path"],\
                         'value_hrf': obs["value"]\
                         }
-        producer.send(topic, value=data_stream)
+        data_stream.append(obs_stream)
+    producer.send(topic, value=data_stream)
 
     # Block until all the messages have been sent
     producer.flush()
