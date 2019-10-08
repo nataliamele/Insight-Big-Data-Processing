@@ -63,7 +63,7 @@ if __name__ == "__main__":
         .writeStream \
         .outputMode("append") \
         .foreachBatch(postgres_batch_analyzed) \
-        .trigger(processingTime="5 seconds") \
+        # .trigger(processingTime="5 seconds") \
         .start()
 
     df_write.awaitTermination()
