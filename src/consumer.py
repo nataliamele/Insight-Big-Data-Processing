@@ -59,7 +59,7 @@ if __name__ == "__main__":
     print("observed_data_parsed",df_parsed)
 
     #write to TimescaleDB 
-    df_write = df_analyzed \
+    df_write = df_parsed\
         .writeStream \
         .outputMode("append") \
         .foreachBatch(postgres_batch_analyzed) \
