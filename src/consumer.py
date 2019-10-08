@@ -33,10 +33,10 @@ if __name__ == "__main__":
         .getOrCreate()
     spark.sparkContext.setLogLevel("WARN")
     # Desired format of the incoming data
-    dfSchema = StructType([ StructField("ts", TimestampType(), False)\
-                                , StructField("node_id", StringType(),False)\
-                                , StructField("sensor_path", StringType(), False)\
-                                , StructField("value_hrf", FloatType(), False)\
+    dfSchema = StructType([ StructField("ts", TimestampType(), True)\
+                                , StructField("node_id", StringType(),True)\
+                                , StructField("sensor_path", StringType(), True)\
+                                , StructField("value_hrf", FloatType(), True)\
                              ])
     # Subscribe to a Kafka topic
     dfstream = spark.readStream \
@@ -57,6 +57,7 @@ if __name__ == "__main__":
         )
 
     print("observed_data_parsed",df_parsed)
+    # DataFrame[ts: timestamp, node_id: string, sensor_path: string, value_hrf: float])
 
     #write to TimescaleDB 
     df_write = df_parsed\
