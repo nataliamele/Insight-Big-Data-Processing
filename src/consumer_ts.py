@@ -46,9 +46,8 @@ trans_df.show()
 consoleOutput = input_df.writeStream \
     .outputMode("append") \
     .format("console") \
-    .start()
-
-consoleOutput.awaitTermination()
+    .start() \
+    .awaitTermination()
 
 
 spark.streams.awaitAnyTermination()
