@@ -37,7 +37,6 @@ if __name__ == "__main__":
                                 , StructField("value_hrf", FloatType(), True)\
                              ])
     
-    dfstream.printSchema()
     # 'Dfstream:', DataFrame[parsed_value: struct<ts:timestamp,node_id:string,sensor_path:string,value_hrf:float>])
     
     # Subscribe to a Kafka topic
@@ -49,7 +48,8 @@ if __name__ == "__main__":
         .load() \
         # .select(from_json(dfstream.value, dfSchema).alias("parsed_value"))
         # .select(from_json(col("value").cast("string"), dfSchema).alias("parsed_value")) 
-        #        
+        #
+    dfstream.printSchema()        
     dfstream_parsed= dfstream.select(from_json(dfstream.value, dfSchema).alias("parsed_value"))
 
 
