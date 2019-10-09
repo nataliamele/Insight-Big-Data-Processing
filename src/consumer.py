@@ -64,10 +64,10 @@ if __name__ == "__main__":
         "parsed_value.ts",\
         "parsed_value.node_id",\
         "parsed_value.sensor_path",\
-        "parsed_value.value_hrf",\
+        "parsed_value.value_hrf"\
         )
 
-    print("observed_data_parsed",df_parsed)
+    print("DF parsed: ",df_parsed)
     # DataFrame[ts: timestamp, node_id: string, sensor_path: string, value_hrf: float])
 
     #write to TimescaleDB 
