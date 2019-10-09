@@ -78,7 +78,7 @@ if __name__ == "__main__":
             .foreachBatch(postgres_batch) \
             .start()
     except (Exception, psycopg2.DatabaseError) as error:
-    print(error)
+        print(error)
 
     df_write.awaitTermination()
 
