@@ -7,8 +7,6 @@ from pyspark.sql.functions import *
 from pyspark.sql.types import *
 import operator
 import numpy as np
-# import pywt
-# import entropy
 import os
 
 # foreachBatch write sink; helper function for writing streaming dataFrames
@@ -20,7 +18,8 @@ def postgres_batch(df, epoch_id):
         properties={
             "user": os.environ['PG_USER'],
             "password": os.environ['PG_PWD']
-        })
+            }
+        )
 
 
 if __name__ == "__main__":
