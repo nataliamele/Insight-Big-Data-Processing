@@ -17,20 +17,20 @@ spark.sparkContext.setLogLevel("ERROR")
 brokers = "10.0.0.7:9092,10.0.0.9:9092,10.0.0.11:9092"
 topic = "sensors-data"
 
-dfSchema = StructType([ StructField("ts", TimestampType()), \
-                        StructField("node_id", StringType()),\
-                        StructField("sensor_path", StringType())\
-                        StructField("value_hrf", FloatType())\
-                        ])
+# dfSchema = StructType([ StructField("ts", TimestampType()), \
+#                         StructField("node_id", StringType()),\
+#                         StructField("sensor_path", StringType())\
+#                         StructField("value_hrf", FloatType())\
+#                         ])
     
-# schema = StructType()\
-#     .add('post',StringType())\
-#     .add('subreddit',StringType())\
-#     .add('timestamp',TimestampType())
+dfSchema = StructType()\
+    .add('ts',TimestampType())\
+    .add('node_id',StringType())\
+    .add('sensor_path',StringType())\
+    .add('value_hrf',FloatType())
 
 
-input_df = spark \
-  .readStream \
+input_df = spark.readStream \
   .format("kafka") \
   .option("kafka.bootstrap.servers", brokers) \
   .option("subscribe", topic) \
