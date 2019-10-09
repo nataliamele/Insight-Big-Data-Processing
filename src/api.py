@@ -35,7 +35,7 @@ try:
     inserted = 0
 
     # Connect to DB
-    conn = psycopg2.connect(host="10.0.0.4", port="5342", database="aotdb", user="pgadmin", password="n*tAdmin85")
+    conn = psycopg2.connect(host="10.0.0.4", port="", database="", user="", password="")
     cur = conn.cursor()
 
     # Get observations
