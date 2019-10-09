@@ -37,6 +37,9 @@ if __name__ == "__main__":
                                 , StructField("sensor_path", StringType(), True)\
                                 , StructField("value_hrf", FloatType(), True)\
                              ])
+    
+    # 'Dfstream:', DataFrame[parsed_value: struct<ts:timestamp,node_id:string,sensor_path:string,value_hrf:float>])
+    
     # Subscribe to a Kafka topic
     dfstream = spark.readStream \
         .format("kafka") \
@@ -68,11 +71,14 @@ if __name__ == "__main__":
     # DataFrame[ts: timestamp, node_id: string, sensor_path: string, value_hrf: float])
 
     #write to TimescaleDB 
-    df_write = df_parsed\
-        .writeStream \
-        .outputMode("append") \
-        .foreachBatch(postgres_batch) \
-        .start()
+    try:
+        df_write = df_parsed\
+            .writeStream \
+            .outputMode("append") \
+            .foreachBatch(postgres_batch) \
+            .start()
+    except (Exception, psycopg2.DatabaseError) as error:
+    print(error)
 
     df_write.awaitTermination()
 
