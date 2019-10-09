@@ -56,7 +56,7 @@ if __name__ == "__main__":
     #         get_json_object(dfstream_str.value, "$.sensor_path").cast(StringType()).alias("sensor_path")
     #         get_json_object(dfstream_str.value, "$.value_hrf_id").cast(FloatType()).alias("value_hrf")
     # )
-
+    print('Dfstream:', dfstream)
     df_parsed = dfstream.select(\
         "parsed_value.ts",\
         "parsed_value.node_id",\
