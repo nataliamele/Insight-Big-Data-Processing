@@ -73,12 +73,18 @@ if __name__ == "__main__":
     print("DF parsed: ",df_parsed)
     # DataFrame[ts: timestamp, node_id: string, sensor_path: string, value_hrf: float])
 
-    #write to TimescaleDB 
-    df_write = df_parsed\
-            .writeStream \
-            .outputMode("append") \
-            .foreachBatch(postgres_batch) \
-            .start()
+    consoleOutput = df_parsed.writeStream \
+    .outputMode("append") \
+    .format("console") \
+    .start() \
+    .awaitTermination()
 
-    df_write.awaitTermination()
+    #write to TimescaleDB 
+    # df_write = df_parsed\
+    #         .writeStream \
+    #         .outputMode("append") \
+    #         .foreachBatch(postgres_batch) \
+    #         .start()
+
+    # df_write.awaitTermination()
 
