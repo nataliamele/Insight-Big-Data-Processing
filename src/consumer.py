@@ -31,10 +31,10 @@ if __name__ == "__main__":
         .getOrCreate()
     spark.sparkContext.setLogLevel("WARN")
     # Desired format of the incoming data
-    dfSchema = StructType([ StructField("ts", TimestampType(), True)\
-                                , StructField("node_id", StringType(),True)\
-                                , StructField("sensor_path", StringType(), True)\
-                                , StructField("value_hrf", FloatType(), True)\
+    dfSchema = StructType([ StructField("ts", TimestampType())\
+                                , StructField("node_id", StringType())\
+                                , StructField("sensor_path", StringType())\
+                                , StructField("value_hrf", FloatType())\
                              ])
     
     # 'Dfstream:', DataFrame[parsed_value: struct<ts:timestamp,node_id:string,sensor_path:string,value_hrf:float>])
@@ -50,25 +50,25 @@ if __name__ == "__main__":
         # .select(from_json(col("value").cast("string"), dfSchema).alias("parsed_value")) 
         #
     dfstream.printSchema()        
-    dfstream_parsed= dfstream.select(from_json(dfstream.value, dfSchema).alias("parsed_value"))
+    # dfstream_parsed= dfstream.select(from_json(dfstream.value, dfSchema).alias("parsed_value"))
 
 
-    # dfstream_str = dfstream.selectExpr("CAST(value AS STRING)")
+    dfstream_str = dfstream.selectExpr("CAST(value AS STRING)")
     # Parse this into a schema using Spark's JSON decoder:
-    # df_parsed = dfstream_str.select(
-    #         get_json_object(dfstream_str.value, "$.ts").cast(TimestampType()).alias("ts"),
-    #         get_json_object(dfstream_str.value, "$.node_id").cast(StringType()).alias("node_id")
-    #         get_json_object(dfstream_str.value, "$.sensor_path").cast(StringType()).alias("sensor_path")
-    #         get_json_object(dfstream_str.value, "$.value_hrf_id").cast(FloatType()).alias("value_hrf")
-    # )
+    df_parsed = dfstream_str.select(
+            get_json_object(dfstream_str.value, "$.ts").cast(TimestampType()).alias("ts"),
+            get_json_object(dfstream_str.value, "$.node_id").cast(StringType()).alias("node_id")
+            get_json_object(dfstream_str.value, "$.sensor_path").cast(StringType()).alias("sensor_path")
+            get_json_object(dfstream_str.value, "$.value_hrf_id").cast(FloatType()).alias("value_hrf")
+    )
     print('Dfstream:', dfstream_parsed)
 
-    df_parsed = dfstream_parsed.select(\
-        "parsed_value.ts",\
-        "parsed_value.node_id",\
-        "parsed_value.sensor_path",\
-        "parsed_value.value_hrf"\
-        )
+    # df_parsed = dfstream_parsed.select(\
+    #     "parsed_value.ts",\
+    #     "parsed_value.node_id",\
+    #     "parsed_value.sensor_path",\
+    #     "parsed_value.value_hrf"\
+    #     )
     
     print("DF parsed: ",df_parsed)
     # DataFrame[ts: timestamp, node_id: string, sensor_path: string, value_hrf: float])
