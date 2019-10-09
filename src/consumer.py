@@ -46,7 +46,8 @@ if __name__ == "__main__":
                 "10.0.0.7:9092,10.0.0.9:9092,10.0.0.11:9092") \
         .option("subscribe", "sensors-data") \
         .load() \
-        .select(from_json(col("value").cast("string"), dfSchema).alias("parsed_value"))
+        .select(from_json(dfstream.value, dfSchema).alias("parsed_value"))
+        # .select(from_json(col("value").cast("string"), dfSchema).alias("parsed_value"))
     
     dfstream.printSchema()
 
