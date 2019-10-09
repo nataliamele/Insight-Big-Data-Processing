@@ -56,11 +56,11 @@ if __name__ == "__main__":
     dfstream_str = dfstream.selectExpr("CAST(value AS STRING)")
     # Parse this into a schema using Spark's JSON decoder:
     df_parsed = dfstream_str.select(
-            get_json_object(dfstream_str.value, "$.ts").cast(TimestampType()).alias("ts"),
-            get_json_object(dfstream_str.value, "$.node_id").cast(StringType()).alias("node_id")
-            get_json_object(dfstream_str.value, "$.sensor_path").cast(StringType()).alias("sensor_path")
-            get_json_object(dfstream_str.value, "$.value_hrf_id").cast(FloatType()).alias("value_hrf")
-    )
+            get_json_object(dfstream_str.value, "$.ts").cast(TimestampType()).alias("ts"), \
+            get_json_object(dfstream_str.value, "$.node_id").cast(StringType()).alias("node_id"),\
+            get_json_object(dfstream_str.value, "$.sensor_path").cast(StringType()).alias("sensor_path"),\
+            get_json_object(dfstream_str.value, "$.value_hrf_id").cast(FloatType()).alias("value_hrf")\
+            )
     print('Dfstream:', dfstream_parsed)
 
     # df_parsed = dfstream_parsed.select(\
