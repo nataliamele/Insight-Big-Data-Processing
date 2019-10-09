@@ -37,6 +37,7 @@ if __name__ == "__main__":
                                 , StructField("value_hrf", FloatType(), True)\
                              ])
     
+    dfstream.printSchema()
     # 'Dfstream:', DataFrame[parsed_value: struct<ts:timestamp,node_id:string,sensor_path:string,value_hrf:float>])
     
     # Subscribe to a Kafka topic
@@ -46,10 +47,11 @@ if __name__ == "__main__":
                 "10.0.0.7:9092,10.0.0.9:9092,10.0.0.11:9092") \
         .option("subscribe", "sensors-data") \
         .load() \
-        .select(from_json(dfstream.value, dfSchema).alias("parsed_value"))
-        # .select(from_json(col("value").cast("string"), dfSchema).alias("parsed_value"))
-    
-    dfstream.printSchema()
+        # .select(from_json(dfstream.value, dfSchema).alias("parsed_value"))
+        # .select(from_json(col("value").cast("string"), dfSchema).alias("parsed_value")) 
+        #        
+    dfstream_parsed= dfstream.select(from_json(dfstream.value, dfSchema).alias("parsed_value"))
+
 
     # dfstream_str = dfstream.selectExpr("CAST(value AS STRING)")
     # Parse this into a schema using Spark's JSON decoder:
@@ -59,14 +61,15 @@ if __name__ == "__main__":
     #         get_json_object(dfstream_str.value, "$.sensor_path").cast(StringType()).alias("sensor_path")
     #         get_json_object(dfstream_str.value, "$.value_hrf_id").cast(FloatType()).alias("value_hrf")
     # )
-    print('Dfstream:', dfstream)
-    df_parsed = dfstream.select(\
+    print('Dfstream:', dfstream_parsed)
+
+    df_parsed = dfstream_parsed.select(\
         "parsed_value.ts",\
         "parsed_value.node_id",\
         "parsed_value.sensor_path",\
         "parsed_value.value_hrf"\
         )
-
+    
     print("DF parsed: ",df_parsed)
     # DataFrame[ts: timestamp, node_id: string, sensor_path: string, value_hrf: float])
 
