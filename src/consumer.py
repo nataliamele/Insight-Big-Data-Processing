@@ -15,7 +15,7 @@ import os
 def postgres_batch(df, epoch_id):
     df.write.jdbc(
         url="jdbc:postgresql://10.0.0.4:5342/aotdb",
-        table="observations",
+        table="public.observations",
         mode="append",
         properties={
             "user": os.environ['PG_USER'],
@@ -71,14 +71,11 @@ if __name__ == "__main__":
     # DataFrame[ts: timestamp, node_id: string, sensor_path: string, value_hrf: float])
 
     #write to TimescaleDB 
-    try:
-        df_write = df_parsed\
+    df_write = df_parsed\
             .writeStream \
             .outputMode("append") \
             .foreachBatch(postgres_batch) \
             .start()
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
 
     df_write.awaitTermination()
 
