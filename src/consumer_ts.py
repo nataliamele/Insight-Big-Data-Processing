@@ -14,7 +14,7 @@ spark = SparkSession \
 # actually works?
 spark.sparkContext.setLogLevel("ERROR")
 
-brokers = "10.0.0.7:9092,10.0.0.9:9092,10.0.0.11:9092
+brokers = "10.0.0.7:9092,10.0.0.9:9092,10.0.0.11:9092"
 topic = "sensors-data"
 
 dfSchema = StructType([ StructField("ts", TimestampType()), \
