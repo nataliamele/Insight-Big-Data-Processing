@@ -31,7 +31,7 @@ if __name__ == "__main__":
         .getOrCreate()
     spark.sparkContext.setLogLevel("WARN")
     # Desired format of the incoming data
-    dfSchema = StructType([ StructField("ts", TimestampType())\
+    dfSchema = StructType([ StructField("ts", IntegerType())\
                                 , StructField("node_id", StringType())\
                                 , StructField("sensor_path", StringType())\
                                 , StructField("value_hrf", FloatType())\
@@ -56,10 +56,10 @@ if __name__ == "__main__":
     dfstream_str = dfstream.selectExpr("CAST(value AS STRING)")
     # Parse this into a schema using Spark's JSON decoder:
     df_parsed = dfstream_str.select(
-            get_json_object(dfstream_str.value, "$.ts").cast(TimestampType()).alias("ts"), \
+            get_json_object(dfstream_str.value, "$.ts").cast(IntegerType()).alias("ts"), \
             get_json_object(dfstream_str.value, "$.node_id").cast(StringType()).alias("node_id"),\
             get_json_object(dfstream_str.value, "$.sensor_path").cast(StringType()).alias("sensor_path"),\
-            get_json_object(dfstream_str.value, "$.value_hrf_id").cast(FloatType()).alias("value_hrf")\
+            get_json_object(dfstream_str.value, "$.value_hrf").cast(FloatType()).alias("value_hrf")\
             )
     # print('Dfstream:', dfstream_parsed)
 
@@ -70,8 +70,8 @@ if __name__ == "__main__":
     #     "parsed_value.value_hrf"\
     #     )
     
-    print("DF parsed: ",df_parsed)
-    # DataFrame[ts: timestamp, node_id: string, sensor_path: string, value_hrf: float])
+    
+    # write to console)
 
     # consoleOutput = df_parsed.writeStream \
     # .outputMode("append") \
