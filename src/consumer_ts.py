@@ -41,13 +41,12 @@ input_df = spark.readStream \
 input_df.printSchema()
 
 trans_df = input_df.selectExpr("CAST(value AS STRING)")
-trans_df.show()
+# trans_df.show()
 
 consoleOutput = input_df.writeStream \
     .outputMode("append") \
     .format("console") \
     .start() \
     .awaitTermination()
-
 
 spark.streams.awaitAnyTermination()
