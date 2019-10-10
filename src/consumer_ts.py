@@ -1,52 +1,15 @@
-from pyspark.sql import Row, SparkSession
-from pyspark.sql.functions import *
-from pyspark.sql.types import *
-import operator
-import numpy as np
-import os
+from pyspark import SparkContext
+from pyspark.streaming import StreamingContext
+from pyspark.streaming.kafka import KafkaUtils
 
+sc = SparkContext(appName="PythonSparkStreamingKafka")
+sc.setLogLevel("WARN")
 
-spark = SparkSession \
-            .builder \
-            .appName("Spark_test") \
-            .getOrCreate()
+ssc = StreamingContext(sc,60)
 
-# actually works?
-spark.sparkContext.setLogLevel("ERROR")
+kafkaStream = KafkaUtils.createStream(ssc, '10.0.0.7:9092','10.0.0.9:9092','10.0.0.11:9092', {'sensors-data':1})
+lines = kafkaStream.map(lambda x: x[1])
+lines.pprint()
 
-brokers = "10.0.0.7:9092,10.0.0.9:9092,10.0.0.11:9092"
-topic = "sensors-data"
-
-# dfSchema = StructType([ StructField("ts", TimestampType()), \
-#                         StructField("node_id", StringType()),\
-#                         StructField("sensor_path", StringType())\
-#                         StructField("value_hrf", FloatType())\
-#                         ])
-    
-dfSchema = StructType()\
-    .add('ts',TimestampType())\
-    .add('node_id',StringType())\
-    .add('sensor_path',StringType())\
-    .add('value_hrf',FloatType())
-
-
-input_df = spark.readStream \
-  .format("kafka") \
-  .option("kafka.bootstrap.servers", brokers) \
-  .option("subscribe", topic) \
-  .option("startingOffsets", "earliest") \
-  .load()
-
-
-input_df.printSchema()
-
-trans_df = input_df.selectExpr("CAST(value AS STRING)")
-# trans_df.show()
-
-consoleOutput = input_df.writeStream \
-    .outputMode("append") \
-    .format("console") \
-    .start() \
-    .awaitTermination()
-
-spark.streams.awaitAnyTermination()
+ssc.start()  
+ssc.awaitTermination()
