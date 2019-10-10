@@ -6,7 +6,7 @@ from pyspark.sql import Row, SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
 import operator
-import numpy as np
+# import numpy as np
 import os
 
 # foreachBatch write sink; helper function for writing streaming dataFrames
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     # https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#quick-example
     spark = SparkSession \
         .builder \
-        .appName("CityHealthMonitor") \
+        .appName("SensorsDataStream") \
         .getOrCreate()
     spark.sparkContext.setLogLevel("WARN")
     # Desired format of the incoming data
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     # .start() \
     # .awaitTermination()
 
-    #write to TimescaleDB 
+    write to TimescaleDB 
     df_write = df_parsed.writeStream \
             .outputMode("append") \
             .foreachBatch(postgres_batch) \
