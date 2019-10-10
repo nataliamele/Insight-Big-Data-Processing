@@ -78,7 +78,7 @@ if __name__ == "__main__":
     # .start() \
     # .awaitTermination()
 
-    write to TimescaleDB 
+    # write to TimescaleDB 
     df_write = df_parsed.writeStream \
             .outputMode("append") \
             .foreachBatch(postgres_batch) \
