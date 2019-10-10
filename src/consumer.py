@@ -48,8 +48,7 @@ if __name__ == "__main__":
 # df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
 
     # Subscribe to a Kafka topic
-    dfstream = spark.read\
-        .format("kafka") \
+    dfstream = spark.read.format("kafka") \
         .option("kafka.bootstrap.servers","10.0.0.7:9092,10.0.0.9:9092,10.0.0.11:9092") \
         .option("subscribe", "sensors-data") \
         .load() 
