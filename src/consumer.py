@@ -57,16 +57,16 @@ if __name__ == "__main__":
     
     # write to console
 
-    consoleOutput = df_parsed.writeStream \
-    .outputMode("append") \
-    .format("console") \
-    .start() \
-    .awaitTermination()
+    # consoleOutput = df_parsed.writeStream \
+    # .outputMode("append") \
+    # .format("console") \
+    # .start() \
+    # .awaitTermination()
 
-    # write to TimescaleDB 
-    # df_write = df_parsed.writeStream \
-    #         .outputMode("append") \
-    #         .foreachBatch(postgres_batch) \
-    #         .start()\
-    #         .awaitTermination()
+    write to TimescaleDB 
+    df_write = df_parsed.writeStream \
+            .outputMode("append") \
+            .foreachBatch(postgres_batch) \
+            .start()\
+            .awaitTermination()
 
