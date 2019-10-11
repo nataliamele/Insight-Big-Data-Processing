@@ -41,6 +41,7 @@ if __name__ == "__main__":
     dfstream = spark.readStream.format("kafka") \
         .option("kafka.bootstrap.servers","10.0.0.7:9092,10.0.0.9:9092,10.0.0.11:9092") \
         .option("subscribe", "sensors-data") \
+        .option("stratingOffsets","earliest")
         .load() 
 
     dfstream.printSchema() 
