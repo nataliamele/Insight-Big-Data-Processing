@@ -21,46 +21,31 @@ def postgres_batch(df, epoch_id):
             }
         )
 
-
 if __name__ == "__main__":
-    # Create a local SparkSession
-    # https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#quick-example
+
+    # Create SparkSession
     spark = SparkSession \
         .builder \
         .appName("SensorsDataStream") \
         .getOrCreate()
     spark.sparkContext.setLogLevel("WARN")
+
     # Desired format of the incoming data
     dfSchema = StructType([ StructField("ts", IntegerType())\
                                 , StructField("node_id", StringType())\
                                 , StructField("sensor_path", StringType())\
                                 , StructField("value_hrf", FloatType())\
                              ])
-    
-    # 'Dfstream:', DataFrame[parsed_value: struct<ts:timestamp,node_id:string,sensor_path:string,value_hrf:float>])
-
-#   df = spark \
-#   .read \
-#   .format("kafka") \
-#   .option("kafka.bootstrap.servers", "host1:port1,host2:port2") \
-#   .option("subscribe", "topic1") \
-#   .load()
-# df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
 
     # Subscribe to a Kafka topic
     dfstream = spark.readStream.format("kafka") \
         .option("kafka.bootstrap.servers","10.0.0.7:9092,10.0.0.9:9092,10.0.0.11:9092") \
         .option("subscribe", "sensors-data") \
         .load() 
-        # .select(from_json(dfstream.value, dfSchema).alias("parsed_value"))
-        # .select(from_json(col("value").cast("string"), dfSchema).alias("parsed_value")) 
-        #
+
     dfstream.printSchema() 
     dfstream_str=dfstream.selectExpr("CAST(value AS STRING)")       
-    # dfstream_parsed= dfstream.select(from_json(dfstream.value, dfSchema).alias("parsed_value"))
 
-
-    # dfstream_str = dfstream.selectExpr("CAST(value AS STRING)")
     # Parse this into a schema using Spark's JSON decoder:
     df_parsed = dfstream_str.select(
             get_json_object(dfstream_str.value, "$.ts").cast(IntegerType()).alias("ts"), \
@@ -68,17 +53,8 @@ if __name__ == "__main__":
             get_json_object(dfstream_str.value, "$.sensor_path").cast(StringType()).alias("sensor_path"),\
             get_json_object(dfstream_str.value, "$.value_hrf").cast(FloatType()).alias("value_hrf")\
             )
-    # print('Dfstream:', dfstream_parsed)
-
-    # df_parsed = dfstream_parsed.select(\
-    #     "parsed_value.ts",\
-    #     "parsed_value.node_id",\
-    #     "parsed_value.sensor_path",\
-    #     "parsed_value.value_hrf"\
-    #     )
     
-    
-    # write to console)
+    # write to console
 
     consoleOutput = df_parsed.writeStream \
     .outputMode("append") \
