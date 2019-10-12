@@ -41,7 +41,7 @@ if __name__ == "__main__":
     dfstream = spark.readStream.format("kafka") \
         .option("kafka.bootstrap.servers","10.0.0.7:9092,10.0.0.9:9092,10.0.0.11:9092") \
         .option("subscribe", "sensors-data") \
-        .option("stratingOffsets","earliest") \
+        .option("startingOffsets","earliest") \
         .load() 
 
     dfstream.printSchema() 
@@ -58,8 +58,8 @@ if __name__ == "__main__":
     # write to console
 
     # consoleOutput = df_parsed.writeStream \
-    # .outputMode("append") \
     # .format("console") \
+    # .trigger(once=True) \
     # .start() \
     # .awaitTermination()
 
