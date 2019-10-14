@@ -1,7 +1,6 @@
 '''
 Reads Producer's data, filter and store to db
 '''
-
 from pyspark.sql import Row, SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
@@ -16,8 +15,8 @@ def postgres_batch(df, epoch_id):
         table="public.observations",
         mode="append",
         properties={
-            "user": os.environ['PG_USER'],
-            "password": os.environ['PG_PWD']
+            "user": os.environ['DB_USER'],
+            "password": os.environ['DB_PWD']
             }
         )
 
@@ -39,13 +38,14 @@ if __name__ == "__main__":
 
     # Subscribe to a Kafka topic
     dfstream = spark.readStream.format("kafka") \
-        .option("kafka.bootstrap.servers","10.0.0.7:9092,10.0.0.9:9092,10.0.0.11:9092") \
-        .option("subscribe", "sensors-data") \
+        .option("kafka.bootstrap.servers","kafka1:9092,kafka2:9092,kafka3:9092") \
+        .option("kafka.partition.assignment.strategy", "range") \
+        .option("subscribe", "observationsstream") \
         .option("startingOffsets","earliest") \
         .load() 
 
     dfstream.printSchema() 
-    dfstream_str=dfstream.selectExpr("CAST(value AS STRING)")       
+    dfstream_str=dfstream.selectExpr("CAST(value AS STRING)")     
 
     # Parse this into a schema using Spark's JSON decoder:
     df_parsed = dfstream_str.select(
@@ -57,11 +57,14 @@ if __name__ == "__main__":
     
     # write to console
 
-    # consoleOutput = df_parsed.writeStream \
+    #consoleOutput = dfstream.writeStream \
+    # .outputMode("update") \
     # .format("console") \
-    # .trigger(once=True) \
     # .start() \
     # .awaitTermination()
+
+#.trigger(once=True) \
+
 
     ## write to TimescaleDB 
 
@@ -70,4 +73,3 @@ if __name__ == "__main__":
             .foreachBatch(postgres_batch) \
             .start()\
             .awaitTermination()
-
