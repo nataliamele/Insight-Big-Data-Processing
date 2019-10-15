@@ -1,6 +1,8 @@
+
 '''
 Reads Producer's data, filter and store to db
 '''
+
 from pyspark.sql import Row, SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
@@ -45,7 +47,7 @@ if __name__ == "__main__":
         .load() 
 
     dfstream.printSchema() 
-    dfstream_str=dfstream.selectExpr("CAST(value AS STRING)")     
+    dfstream_str=dfstream.selectExpr("CAST(value AS STRING)")
 
     # Parse this into a schema using Spark's JSON decoder:
     df_parsed = dfstream_str.select(
@@ -57,19 +59,19 @@ if __name__ == "__main__":
     
     # write to console
 
-    #consoleOutput = dfstream.writeStream \
-    # .outputMode("update") \
-    # .format("console") \
-    # .start() \
-    # .awaitTermination()
+    consoleOutput = dfstream.writeStream \
+     .outputMode("update") \
+     .format("console") \
+     .start() \
+     .awaitTermination()
 
 #.trigger(once=True) \
 
 
     ## write to TimescaleDB 
 
-    df_write = df_parsed.writeStream \
-            .outputMode("append") \
-            .foreachBatch(postgres_batch) \
-            .start()\
-            .awaitTermination()
+    #df_write = df_parsed.writeStream \
+    #        .outputMode("append") \
+    #        .foreachBatch(postgres_batch) \
+    #        .start()\
+    #        .awaitTermination()
