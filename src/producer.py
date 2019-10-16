@@ -7,7 +7,7 @@ import datetime
 from time import sleep
 from json import dumps
 
-topic = "sensors-data"
+topic = "sensors2"
 brokers = ['10.0.0.7:9092','10.0.0.9:9092','10.0.0.11:9092']
 
 # Instantiate a Kafka Producer
