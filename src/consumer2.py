@@ -32,7 +32,7 @@ if __name__ == "__main__":
         .appName("SensorsStream")\
         .getOrCreate()
 
-    # Create DataSet representing the stream of input lines from kafka
+    # Read stream from Kafka with provided options
     # .option("zookeeper.connect", zookeeper)
     df = spark\
         .readStream\
