@@ -44,7 +44,7 @@ for page in observations:
         ts = ciso8601.parse_datetime(obs["timestamp"])
         prev_record_timestamp = obs["timestamp"]
         data_stream = {
-                        'ts': time.mktime(ts.timetuple()),\
+                        'ts': int(time.mktime(ts.timetuple())),\
                         'node_id': obs["node_vsn"],\
                         'sensor_path': obs["sensor_path"],\
                         'value_hrf': obs["value"]\
