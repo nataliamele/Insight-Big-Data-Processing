@@ -43,30 +43,30 @@ if __name__ == "__main__":
     # Sensors dataframe
     df_sensors = read_from_db('public.sensors')\
         .select('sensor_path','sensor_measure','hrf_unit','hrf_max')
-    # df_sensors.show().take(5)
+    # df_sensors.show()
 
     # df_sensors = read_from_s3("s3://insight-natnm/data/sensors.csv")\
     #     .select('sensor_path','sensor_measure','hrf_unit','hrf_max')
-    # df_sensors.show().take(5)
+    # df_sensors.show()
 
     # Nodes dataframe
     df_nodes = read_from_db('public.nodes')\
         .select('node_id','vsn','lat', 'lon', 'community_area')
-    # df_nodes.show().take(5)
+    # df_nodes.show()
 
     # df_nodes = read_from_s3("s3://insight-natnm/data/nodes.csv")\
     #     .select('node_id','vsn','lat', 'lon', 'community_area')
-    # df_nodes.show().take(5)
+    # df_nodes.show()
 
     # Observations dataframe
     df_obs = read_from_db('public.observations2')\
         .select('ts','node_id','sensor_path','value_hrf')
-    # df_obs.show().take(5)
+    # df_obs.show()
 
     # Enreach observation dataframe
-    df_result= df_obs.join(df_nodes,df_obs("node_id") == df_nodes("vsn"), how ='left')\
+    df_result= df_obs.join(df_nodes, df_obs["node_id"] == df_nodes["vsn"], how ='left')\
         .select('ts','node_id','sensor_path','value_hrf','lat', 'lon', 'community_area')
 
-    df_result.show().take(5)
+    df_result.show()
     # df_nodes.take(10).show()
     
