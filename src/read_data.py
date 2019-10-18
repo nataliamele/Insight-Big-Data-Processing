@@ -41,7 +41,8 @@ if __name__ == "__main__":
               dbtable="public.nodes",user=os.environ['DB_USER'], password=os.environ['DB_PWD'])\
           .load()
     
-    df_sensors.show()
-    df_obs.show().take(10)
+    df=df_obs.join(df_nodes,df_obs("node_id") === df_nodes("vsn")).select('ts','node_id','sensor_path','value_hrf','lat', 'lon', 'community_area')
+
+    df.show().take(10)
     # df_nodes.take(10).show()
     
