@@ -25,7 +25,7 @@ def read_from_s3(path):
     df = spark.read \
         .option("header", "true") \
         .option("inferSchema", "true") \
-        .option("charset", "UTF-8")
+        .option("charset", "UTF-8") \
         .csv(path)
     return df
 
