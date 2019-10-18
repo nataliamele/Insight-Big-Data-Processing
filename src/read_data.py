@@ -3,7 +3,7 @@ import operator
 import os
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import *
+import pyspark.sql.functions as func
 from pyspark.sql.types import *
 
 
@@ -51,7 +51,7 @@ if __name__ == "__main__":
 
     # Nodes dataframe
     df_nodes = read_from_db('public.nodes')\
-        .select('vsn',functions.round('lat',4), functions.round('lon',4), 'community_area')
+        .select('vsn',func.round('lat',4), func.round('lon',4), 'community_area')
     # df_nodes.show()
 
     # df_nodes = read_from_s3("s3://insight-natnm/data/nodes.csv")\
@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     # Observations dataframe
     df_obs = read_from_db('public.observations2')\
-        .select('ts','node_id','sensor_path', functions.round('value_hrf',2))
+        .select('ts','node_id','sensor_path', func.round('value_hrf',2))
     # df_obs.show()
 
     # Enreach observation dataframe
