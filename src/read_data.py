@@ -31,13 +31,13 @@ if __name__ == "__main__":
             .getOrCreate()
 
 
-    df_sensors = read_from_db(public.sensors)\
+    df_sensors = read_from_db('public.sensors')\
         .select( 'sensor_path','sensor_measure','hrf_unit','hrf_max')
     
-    df_obs = read_from_db(public.sensors)\
+    df_obs = read_from_db('public.observations2')\
         .select('ts','node_id','sensor_path','value_hrf')
     
-    df_nodes = read_from_db(public.sensors)\
+    df_nodes = read_from_db('public.nodes')\
         .select('node_id','vsn','lat', 'lon', 'community_area')
     
     df_result= df_obs.join(df_nodes,df_obs("node_id") == df_nodes("vsn"), how ='left')\
