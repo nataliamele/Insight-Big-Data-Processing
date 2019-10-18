@@ -42,6 +42,6 @@ if __name__ == "__main__":
           .load()
     
     df_sensors.show()
-    df_obs.take(10).show()
+    df_obs.show().take(10)
     # df_nodes.take(10).show()
     
