@@ -6,9 +6,27 @@ import sys
 import operator
 import os
 
+import pyspark.sql
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
+from pyspark.sql.functions import udf, col, to_timestamp, round
 from pyspark.sql.types import *
+
+def read_from_db(db_name):
+    '''
+    Connects to Postgres and reads table into df
+    Returns df
+    '''
+    df = spark.read\
+        .format("jdbc")\
+        .option("header", "true") \
+        .option("inferSchema", "true") \
+        .options(\
+            driver="org.postgresql.Driver", \
+            url="jdbc:postgresql://10.0.0.4:5342/aotdb", \
+            dbtable=db_name,user=os.environ['DB_USER'], password=os.environ['DB_PWD'])\
+        .load()
+    return df
 
 def postgres_batch(df, epoch_id):
     df.write.jdbc(\
@@ -25,14 +43,24 @@ if __name__ == "__main__":
     #Kafka parameters
     zookeeper="10.0.0.7:2181,10.0.0.9:2181,10.0.0.11:2181"
     broker="10.0.0.7:9092,10.0.0.9:9092,10.0.0.11:9092"
-    topic="sensors2"
+    topic="sensors-data"
 
     spark = SparkSession\
         .builder\
         .appName("SensorsStream")\
         .getOrCreate()
+    
+    # Create sensors dataframe from Postgres table
+    df_sensors = read_from_db('public.sensors')\
+        .select('sensor_path','sensor_measure','hrf_unit','hrf_max')
+    
+    # Create nofes dataframe    
+    df_nodes = read_from_db('public.nodes')\
+        .select('vsn','lat', 'lon', 'community_area')\
+        .withColumn('lat', round(col('lat'), 2))\
+        .withColumn('lon', round(col('lon'), 2))
 
-    # Read stream from Kafka with provided options
+    # Connect to Kafka and load stream
     # .option("zookeeper.connect", zookeeper)
     df = spark\
         .readStream\
@@ -43,7 +71,7 @@ if __name__ == "__main__":
         .load()\
         .selectExpr("CAST(value AS STRING)")
 
-    # Desired format of the incoming data
+    # Design schema format for incoming data
     df_schema = StructType([ StructField("ts", IntegerType())\
                                 , StructField("node_id", StringType())\
                                 , StructField("sensor_path", StringType())\
@@ -57,17 +85,22 @@ if __name__ == "__main__":
             get_json_object(df.value, "$.sensor_path").cast(StringType()).alias("sensor_path"),\
             get_json_object(df.value, "$.value_hrf").cast(FloatType()).alias("value_hrf")\
             )
+    
+    # Filter Chemsense and Aphasense sensors
+    df_obs = df_parsed
+        .filter((col('sensor_path').like('chemsense.%')) | (col('sensor_path').like('alphasense.opc_n2.pm%')) )\
+        .select('ts','node_id','sensor_path','value_hrf')\
+        .withColumn('value_hrf', round(col('value_hrf'), 2))
 
-    # print_console = df_parsed.writeStream \
-    #     .outputMode('update')\
-    #     .format('console')\
-    #     .start()
+    # Enreach observation streaming df
+    df_result= df_obs.join(df_nodes, df_obs.node_id == df_nodes.vsn, how='left')\
+        .join(df_sensors, df_obs.sensor_path == df_sensors.sensor_path, how='left').drop(df_sensors.sensor_path) \
+        .select('ts','node_id','sensor_path','value_hrf','hrf_unit','lat', 'lon', 'community_area')
 
-    # print_console.awaitTermination()
 
     ## write to TimescaleDB 
 
-    write_db = df_parsed.writeStream \
+    write_db = df_result.writeStream \
            .outputMode("append") \
            .foreachBatch(postgres_batch) \
            .start()\
