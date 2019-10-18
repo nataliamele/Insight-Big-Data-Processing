@@ -31,7 +31,7 @@ def read_from_db(db_name):
 def postgres_batch(df, epoch_id):
     df.write.jdbc(\
         url="jdbc:postgresql://10.0.0.4:5342/aotdb",\
-        table="public.observations2",\
+        table="public.observations",\
         mode="append",\
         properties={\
             "user": os.environ['DB_USER'],\
