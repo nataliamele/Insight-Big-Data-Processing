@@ -72,11 +72,11 @@ if __name__ == "__main__":
         .selectExpr("CAST(value AS STRING)")
 
     # Design schema format for incoming data
-    df_schema = StructType([ StructField("ts", IntegerType())\
-                                , StructField("node_id", StringType())\
-                                , StructField("sensor_path", StringType())\
-                                , StructField("value_hrf", FloatType())\
-                             ])
+    # df_schema = StructType([ StructField("ts", IntegerType())\
+    #                             , StructField("node_id", StringType())\
+    #                             , StructField("sensor_path", StringType())\
+    #                             , StructField("value_hrf", FloatType())\
+    #                          ])
 
     # Parse into a schema using Spark's JSON decoder:
     df_parsed = df.select(
@@ -94,8 +94,8 @@ if __name__ == "__main__":
 
     # Enreach observation streaming df
     df_result= df_obs.join(df_nodes, df_obs.node_id == df_nodes.vsn, how='left')\
-        .join(df_sensors, df_obs.sensor_path == df_sensors.sensor_path, how='left').drop(df_sensors.sensor_path) \
-        .select('ts','node_id','sensor_path','value_hrf','hrf_unit','lat', 'lon', 'community_area')
+        .join(df_sensors, df_obs.sensor_path == df_sensors.sensor_path, how='left').drop(df_sensors.sensor_path) 
+    #    .select('ts','node_id','sensor_path','value_hrf','hrf_unit','lat', 'lon', 'community_area')
 
 
     ## write to TimescaleDB 
