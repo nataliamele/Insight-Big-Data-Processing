@@ -50,9 +50,11 @@ if __name__ == "__main__":
     # df_sensors.show()
 
     # Nodes dataframe
-    df_nodes = read_from_db('public.nodes')\
-        .select('vsn','lat', 'lon', 'community_area')\
-        .withColumn('lat', func.round(col('lat'), 4)).withColumn('lon', func.round(col('lon'), 4))
+    df_n = read_from_db('public.nodes')\
+        .select('vsn','lat', 'lon', 'community_area')
+    
+    df_nodes = df_n.withColumn('lat', func.round(df_n['lat'], 4))\
+        .withColumn('lon', func.round(df_n['lon'], 4))
     # df_nodes.show()
 
     # df_nodes = read_from_s3("s3://insight-natnm/data/nodes.csv")\
@@ -60,9 +62,10 @@ if __name__ == "__main__":
     # df_nodes.show()
 
     # Observations dataframe
-    df_obs = read_from_db('public.observations2')\
-        .select('ts','node_id','sensor_path','value_hrf')\
-        .withColumn('value_hrf', func.round(col('value_hrf'), 2))
+    df_o = read_from_db('public.observations2')\
+        .select('ts','node_id','sensor_path','value_hrf')
+
+    df_obs = df_o.withColumn('value_hrf', func.round(df_o['value_hrf'], 2))
     # df_obs.show()
 
     # Enreach observation dataframe
