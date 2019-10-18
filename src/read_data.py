@@ -79,8 +79,9 @@ if __name__ == "__main__":
     # df_obs.show()
 
     # Enreach observation dataframe
-    df_result= df_obs.join(df_nodes, df_obs.node_id == df_nodes.vsn, how ='left')\
-        .select('ts','node_id','sensor_path','value_hrf','lat', 'lon', 'community_area')
+    df_result= df_obs.join(df_nodes, df_obs.node_id == df_nodes.vsn, how='left')\
+        .join(df_sensors, df_obs.sensor_path == df_sensors.sensor_path, how='left') \
+        .select('ts','node_id','sensor_path','value_hrf','hrf_unit','lat', 'lon', 'community_area')
  
     df_result.show()
     # df_nodes.take(10).show()
