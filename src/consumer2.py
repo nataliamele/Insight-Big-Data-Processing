@@ -87,7 +87,7 @@ if __name__ == "__main__":
             )
     
     # Filter Chemsense and Aphasense sensors
-    df_obs = df_parsed
+    df_obs = df_parsed \
         .filter((col('sensor_path').like('chemsense.%')) | (col('sensor_path').like('alphasense.opc_n2.pm%')) )\
         .select('ts','node_id','sensor_path','value_hrf')\
         .withColumn('value_hrf', round(col('value_hrf'), 2))
