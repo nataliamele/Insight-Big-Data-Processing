@@ -8,7 +8,10 @@ from pyspark.sql.types import *
 
 
 def read_from_db(db_name):
-
+    '''
+    Connects to Postgres and reads table into df
+    Returns df
+    '''
     df = spark.read\
         .format("jdbc")\
         .option("header", "true") \
@@ -21,7 +24,10 @@ def read_from_db(db_name):
     return df
 
 def read_from_s3(path):
-
+    '''
+    Connects to S3 and reads csv into df
+    Returns df
+    '''
     df = spark.read \
         .option("header", "true") \
         .option("inferSchema", "true") \
@@ -50,19 +56,11 @@ if __name__ == "__main__":
     # df_sensors.show()
 
     # Nodes dataframe
-    # df_n = read_from_db('public.nodes')\
-    #     .select('vsn','lat', 'lon', 'community_area')
-    
-    # df_nodes = df_n.withColumn('lat', func.round(df_n['lat'], 4))\
-    #     .withColumn('lon', func.round(df_n['lon'], 4))
-
-    # df_n = read_from_db('public.nodes')\
-    #     .select('vsn','lat', 'lon', 'community_area')
     
     df_nodes = read_from_db('public.nodes')\
         .select('vsn','lat', 'lon', 'community_area')\
-        .withColumn('lat', round(col('lat'), 4))\
-        .withColumn('lon', round(col('lon'), 4))
+        .withColumn('lat', round(col('lat'), 2))\
+        .withColumn('lon', round(col('lon'), 2))
 
     # df_nodes.show()
 
@@ -70,11 +68,12 @@ if __name__ == "__main__":
     #     .select('node_id','vsn','lat', 'lon', 'community_area')
     # df_nodes.show()
 
-    # Observations dataframe
-    df_o = read_from_db('public.observations2')\
-        .select('ts','node_id','sensor_path','value_hrf')
+    # Observations dataframe 
 
-    df_obs = df_o.withColumn('value_hrf', round(df_o['value_hrf'], 2))
+    df_obs = read_from_db('public.observations2')\
+        .filter(col('sensor_path').contains.like(chemsense.%))\
+        .select('ts','node_id','sensor_path','value_hrf')\
+        .withColumn('value_hrf', round(col('value_hrf'), 2))
     # df_obs.show()
 
     # Enreach observation dataframe
