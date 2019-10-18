@@ -73,7 +73,7 @@ if __name__ == "__main__":
     # Observations dataframe 
 
     df_obs = read_from_db('public.observations2')\
-        .filter(col('sensor_path').like('chemsense.%'))\
+        .filter((col('sensor_path').like('chemsense.%')) | (col('sensor_path').like('alphasense.opc_n2.pm%')) )\
         .select('ts','node_id','sensor_path','value_hrf')\
         .withColumn('value_hrf', round(col('value_hrf'), 2))
     # df_obs.show()
