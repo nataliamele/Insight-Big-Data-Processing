@@ -80,7 +80,7 @@ if __name__ == "__main__":
 
     # Enreach observation dataframe
     df_result= df_obs.join(df_nodes, df_obs.node_id == df_nodes.vsn, how='left')\
-        .join(df_sensors, df_obs.sensor_path == df_sensors.sensor_path, how='left') \
+        .join(df_sensors, df_obs.sensor_path == df_sensors.sensor_path, how='left').drop(df_sensors.sensor_path) \
         .select('ts','node_id','sensor_path','value_hrf','hrf_unit','lat', 'lon', 'community_area')
  
     df_result.show()
