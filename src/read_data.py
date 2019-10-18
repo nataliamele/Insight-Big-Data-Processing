@@ -51,7 +51,7 @@ if __name__ == "__main__":
 
     # Nodes dataframe
     df_nodes = read_from_db('public.nodes')\
-        .select('node_id','vsn','lat', 'lon', 'community_area')
+        .select('vsn','lat', 'lon', 'community_area')
     # df_nodes.show()
 
     # df_nodes = read_from_s3("s3://insight-natnm/data/nodes.csv")\
