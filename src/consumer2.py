@@ -101,7 +101,7 @@ if __name__ == "__main__":
 
     # Enreach observation streaming df
     df_result= df_obs.join(df_nodes, df_obs.node_id == df_nodes.vsn, 'left_outer')\
-        .join(df_sensors, df_obs.sensor_path == df_sensors.sensor_path, 'left_outer').drop(df_sensors.sensor_path) 
+        .join(df_sensors, df_obs.sensor_path == df_sensors.sensor_path, 'left_outer').drop(df_sensors.sensor_path) \
         .select('ts','node_id','sensor_path','value_hrf','hrf_unit','lat', 'lon', 'community_area')
 
 
