@@ -25,7 +25,7 @@ def read_from_db(table_name):
         .options(\
             driver="org.postgresql.Driver", \
             url="jdbc:postgresql://10.0.0.4:5342/aotdb", \
-            dbtable=db_name,user=os.environ['DB_USER'], password=os.environ['DB_PWD'])\
+            dbtable=table_name,user=os.environ['DB_USER'], password=os.environ['DB_PWD'])\
         .load()
     return df
 
