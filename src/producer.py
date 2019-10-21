@@ -28,7 +28,7 @@ try:
     fh.close()
 except FileNotFoundError:
     # t = (datetime.datetime.utcnow() - datetime.timedelta(hours=6))
-    t = (datetime.datetime.utcnow() - datetime.timedelta(minutes=15))
+    t = (datetime.datetime.utcnow() - datetime.timedelta(hours=3))
     prev_record_timestamp = t.isoformat()[0:19]
 
 # Initialize filter (city- Chicago, 5000 records, timestamp, order by timestamp)

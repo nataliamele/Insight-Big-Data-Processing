@@ -74,7 +74,7 @@ if __name__ == "__main__":
         .format("kafka")\
         .option("kafka.bootstrap.servers", broker)\
         .option("subscribe", topic)\
-        .option("startingOffsets","earliest") \
+        .option("startingOffsets","latest") \
         .load()\
         .selectExpr("CAST(value AS STRING)")
 
