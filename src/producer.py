@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 from kafka.producer import KafkaProducer
 import sys
 from aot_client import AotClient, F
@@ -22,14 +19,14 @@ producer = KafkaProducer(bootstrap_servers=brokers, \
 # Initialize AoT client
 client = AotClient()
 
-# Get previous record timestamp 
+# Get previous record timestamp
 try:
     fh = open("state.txt", "r")
     prev_record_timestamp = fh.read()
     t = ciso8601.parse_datetime(prev_record_timestamp)
     fh.close()
 except FileNotFoundError:
-    t = (datetime.datetime.utcnow() - datetime.timedelta(minutes=60))
+    t = (datetime.datetime.utcnow() - datetime.timedelta(minutes=15))
     prev_record_timestamp = t.isoformat()[0:19]
 
 # Initialize filter (city- Chicago, 5000 records, timestamp, order by timestamp)
@@ -42,6 +39,7 @@ f &= ('order', 'asc:timestamp')
 observations = client.list_observations(filters=f)
 # Iterate through records
 for page in observations:
+    # data_stream = []
     for obs in page.data:
         ts = ciso8601.parse_datetime(obs["timestamp"])
         prev_record_timestamp = obs["timestamp"]
