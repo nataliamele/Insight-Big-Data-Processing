@@ -7,7 +7,7 @@ import datetime
 from time import sleep
 from json import dumps
 
-topic = "sensors-data"
+topic = "sensorsdata"
 brokers = ['10.0.0.7:9092','10.0.0.9:9092','10.0.0.11:9092']
 
 # Instantiate a Kafka Producer
@@ -28,12 +28,12 @@ try:
     fh.close()
 except FileNotFoundError:
     # t = (datetime.datetime.utcnow() - datetime.timedelta(hours=6))
-    t = (datetime.datetime.utcnow() - datetime.timedelta(hours=3))
+    t = (datetime.datetime.utcnow() - datetime.timedelta(minutes=15))
     prev_record_timestamp = t.isoformat()[0:19]
 
 # Initialize filter (city- Chicago, 5000 records, timestamp, order by timestamp)
 f = F('project', 'chicago')
-f &= ('size', '5000')
+f &= ('size', '1000')
 f &= ('timestamp', 'gt', prev_record_timestamp)
 f &= ('order', 'asc:timestamp')
 

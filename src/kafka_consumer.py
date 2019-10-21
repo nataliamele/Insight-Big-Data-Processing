@@ -44,7 +44,7 @@ if __name__ == "__main__":
     #Kafka parameters
     zookeeper="10.0.0.7:2181,10.0.0.9:2181,10.0.0.11:2181"
     broker="10.0.0.7:9092,10.0.0.9:9092,10.0.0.11:9092"
-    topic="sensors-data"
+    topic="sensorsdata"
 
     spark = SparkSession\
         .builder\
