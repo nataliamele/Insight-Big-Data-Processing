@@ -19,13 +19,15 @@ producer = KafkaProducer(bootstrap_servers=brokers, \
 # Initialize AoT client
 client = AotClient()
 
-# Get previous record timestamp
+# Get previous record timestamp 
 try:
     fh = open("state.txt", "r")
     prev_record_timestamp = fh.read()
     t = ciso8601.parse_datetime(prev_record_timestamp)
+    #t=datetime.datetime.strptime(prev_record_timestamp, '%Y-%m-%dT%H:%M:%S')
     fh.close()
 except FileNotFoundError:
+    # t = (datetime.datetime.utcnow() - datetime.timedelta(hours=6))
     t = (datetime.datetime.utcnow() - datetime.timedelta(minutes=15))
     prev_record_timestamp = t.isoformat()[0:19]
 
@@ -39,7 +41,6 @@ f &= ('order', 'asc:timestamp')
 observations = client.list_observations(filters=f)
 # Iterate through records
 for page in observations:
-    # data_stream = []
     for obs in page.data:
         ts = ciso8601.parse_datetime(obs["timestamp"])
         prev_record_timestamp = obs["timestamp"]
