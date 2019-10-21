@@ -54,3 +54,6 @@ for page in observations:
 
     # Block until all the messages have been sent
     producer.flush()
+fh = open("state.txt", "w+")
+fh.write(prev_record_timestamp)
+fh.close()
