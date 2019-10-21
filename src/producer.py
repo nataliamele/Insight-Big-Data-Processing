@@ -33,7 +33,7 @@ except FileNotFoundError:
 
 # Initialize filter (city- Chicago, 5000 records, timestamp, order by timestamp)
 f = F('project', 'chicago')
-f &= ('size', '1000')
+f &= ('size', '5000')
 f &= ('timestamp', 'gt', prev_record_timestamp)
 f &= ('order', 'asc:timestamp')
 
@@ -54,6 +54,6 @@ for page in observations:
 
     # Block until all the messages have been sent
     producer.flush()
-fh = open("state.txt", "w+")
-fh.write(prev_record_timestamp)
-fh.close()
+# fh = open("state.txt", "w+")
+# fh.write(prev_record_timestamp)
+# fh.close()
