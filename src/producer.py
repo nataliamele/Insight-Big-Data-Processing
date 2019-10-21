@@ -29,8 +29,7 @@ try:
     t = ciso8601.parse_datetime(prev_record_timestamp)
     fh.close()
 except FileNotFoundError:
-    # t = (datetime.datetime.utcnow() - datetime.timedelta(hours=6))
-    t = (datetime.datetime.utcnow() - datetime.timedelta(hours=3))
+    t = (datetime.datetime.utcnow() - datetime.timedelta(minutes=15))
     prev_record_timestamp = t.isoformat()[0:19]
 
 # Initialize filter (city- Chicago, 5000 records, timestamp, order by timestamp)
@@ -58,6 +57,6 @@ for page in observations:
     producer.flush()
 
 # Write latest processed timestamp to file  
-fh = open("state.txt", "w+")
-fh.write(prev_record_timestamp)
-fh.close()
+# fh = open("state.txt", "w+")
+# fh.write(prev_record_timestamp)
+# fh.close()
