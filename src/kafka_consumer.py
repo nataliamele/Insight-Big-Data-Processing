@@ -39,6 +39,7 @@ def postgres_batch(df, epoch_id):
             "password": os.environ['DB_PWD']\
             }
         )
+
 if __name__ == "__main__":
 
     #Kafka parameters
@@ -110,5 +111,6 @@ if __name__ == "__main__":
     write_db = df_result.writeStream \
            .outputMode("append") \
            .foreachBatch(postgres_batch) \
+           .trigger(processingTime="5 seconds") \
            .start()\
            .awaitTermination()
