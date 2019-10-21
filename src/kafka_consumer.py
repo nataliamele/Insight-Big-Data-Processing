@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -45,18 +44,12 @@ if __name__ == "__main__":
     #Kafka parameters
     zookeeper="10.0.0.7:2181,10.0.0.9:2181,10.0.0.11:2181"
     broker="10.0.0.7:9092,10.0.0.9:9092,10.0.0.11:9092"
-    topic="sensorsdata"
+    topic="aot-stream"
 
     spark = SparkSession\
         .builder\
         .appName("SensorsStream")\
-        .getOrCreate()
-
-    # schema_sensors = StructType([ StructField("sensor_path", StringType())\
-    #                             , StructField("node_id", StringType())\
-    #                             , StructField("sensor_path", StringType())\
-    #                             , StructField("value_hrf", FloatType())\
-    #                          ])   
+        .getOrCreate() 
 
     # Create sensors dataframe from Postgres table
     df_sensors = read_from_db('public.sensors')\
@@ -79,14 +72,9 @@ if __name__ == "__main__":
         .load()\
         .selectExpr("CAST(value AS STRING)")
 
-    # Design schema format for incoming data
-    # df_schema = StructType([ StructField("ts", IntegerType())\
-    #                             , StructField("node_id", StringType())\
-    #                             , StructField("sensor_path", StringType())\
-    #                             , StructField("value_hrf", FloatType())\
-    #                          ])
 
-    # Parse into a schema using Spark's JSON decoder:
+
+    # Parse into desired schema using Spark's JSON decoder:
     df_parsed = df.select(
             get_json_object(df.value, "$.ts").cast(IntegerType()).alias("ts"), \
             get_json_object(df.value, "$.node_id").cast(StringType()).alias("node_id"),\
