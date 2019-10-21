@@ -35,24 +35,28 @@ f &= ('size', '5000')
 f &= ('timestamp', 'gt', prev_record_timestamp)
 f &= ('order', 'asc:timestamp')
 
-# Get observations from AoT
-observations = client.list_observations(filters=f)
-# Iterate through records
-for page in observations:
-    # data_stream = []
-    for obs in page.data:
-        ts = ciso8601.parse_datetime(obs["timestamp"])
-        prev_record_timestamp = obs["timestamp"]
-        data_stream = {
-                        'ts': int(time.mktime(ts.timetuple())),\
-                        'node_id': obs["node_vsn"],\
-                        'sensor_path': obs["sensor_path"],\
-                        'value_hrf': obs["value"]\
-                        }
-        producer.send(topic, value=data_stream)
+try:
+    # Get observations from AoT
+    observations = client.list_observations(filters=f)
+    # Iterate through records
+    for page in observations:
+        # data_stream = []
+        for obs in page.data:
+            ts = ciso8601.parse_datetime(obs["timestamp"])
+            prev_record_timestamp = obs["timestamp"]
+            data_stream = {
+                            'ts': int(time.mktime(ts.timetuple())),\
+                            'node_id': obs["node_vsn"],\
+                            'sensor_path': obs["sensor_path"],\
+                            'value_hrf': obs["value"]\
+                            }
+            producer.send(topic, value=data_stream)
 
-    # Block until all the messages have been sent
-    producer.flush()
+        # Block until all the messages have been sent
+        producer.flush()
+
+except (Exception) as error:
+    print(error)
 
 # Write latest processed timestamp to file  
 fh = open("state.txt", "w+")
