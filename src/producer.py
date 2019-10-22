@@ -7,8 +7,9 @@ import datetime
 from time import sleep
 from json import dumps
 
-topic = "aot-stream"
+topic = "obs-stream"
 brokers = ['10.0.0.7:9092','10.0.0.9:9092','10.0.0.11:9092']
+mins_ago=60*6
 
 # Instantiate a Kafka Producer
 
@@ -26,7 +27,7 @@ try:
     t = ciso8601.parse_datetime(prev_record_timestamp)
     fh.close()
 except FileNotFoundError:
-    t = (datetime.datetime.utcnow() - datetime.timedelta(minutes=15))
+    t = (datetime.datetime.utcnow() - datetime.timedelta(minutes=mins_ago))
     prev_record_timestamp = t.isoformat()[0:19]
 
 # Initialize filter (city- Chicago, 5000 records, timestamp, order by timestamp)
