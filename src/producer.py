@@ -28,7 +28,7 @@ if process_is_running('producer.py'):
 
 topic = "obs-stream"
 brokers = ['10.0.0.7:9092','10.0.0.9:9092','10.0.0.11:9092']
-mins_ago=60*6
+mins_ago=60 #*6
 
 # Instantiate a Kafka Producer
 
