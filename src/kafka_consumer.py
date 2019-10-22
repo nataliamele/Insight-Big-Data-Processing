@@ -14,7 +14,7 @@ from pyspark.sql.types import *
 def read_from_db(table_name):
     '''
     Connects to Postgres and reads table into df.
-    To use your own schema use .schema(schema) instead of ' .option("inferSchema", "true") ' and add to to func parameters
+    To use your own schema use .schema(schema) instead of  .option("inferSchema", "true")  and add to to func parameters
     Returns df
     '''
     df = spark.read\
@@ -44,7 +44,7 @@ if __name__ == "__main__":
     #Kafka parameters
     zookeeper="10.0.0.7:2181,10.0.0.9:2181,10.0.0.11:2181"
     broker="10.0.0.7:9092,10.0.0.9:9092,10.0.0.11:9092"
-    topic="aot-stream"
+    topic="obs-stream"
 
     spark = SparkSession\
         .builder\
@@ -71,8 +71,6 @@ if __name__ == "__main__":
         .option("startingOffsets","latest") \
         .load()\
         .selectExpr("CAST(value AS STRING)")
-
-
 
     # Parse into desired schema using Spark's JSON decoder:
     df_parsed = df.select(

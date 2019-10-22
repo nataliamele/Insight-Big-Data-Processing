@@ -35,10 +35,10 @@ f &= ('size', '5000')
 f &= ('timestamp', 'gt', prev_record_timestamp)
 f &= ('order', 'asc:timestamp')
 
+# Get observations from AoT
+observations = client.list_observations(filters=f)
+# Iterate through records
 try:
-    # Get observations from AoT
-    observations = client.list_observations(filters=f)
-    # Iterate through records
     for page in observations:
         # data_stream = []
         for obs in page.data:
@@ -51,14 +51,13 @@ try:
                             'value_hrf': obs["value"]\
                             }
             producer.send(topic, value=data_stream)
-
         # Block until all the messages have been sent
         producer.flush()
 
-except (Exception) as error:
+except (Exception, HTTPError) as error:
     print(error)
-
-# Write latest processed timestamp to file  
-fh = open("state.txt", "w+")
-fh.write(prev_record_timestamp)
-fh.close()
+finally:
+    # Write latest processed timestamp to file  
+    fh = open("state.txt", "w+")
+    fh.write(prev_record_timestamp)
+    fh.close()
