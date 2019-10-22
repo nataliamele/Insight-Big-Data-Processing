@@ -6,6 +6,25 @@ import time
 import datetime
 from time import sleep
 from json import dumps
+import psutil
+import os
+
+
+def process_is_running(process_name):
+    # Iterate over the all the running process
+    for proc in psutil.process_iter():
+        try:
+            # Check if process name contains the given name string.
+            if process_name.lower() in proc.cmdline() and proc.pid != os.getpid():
+                return True
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            pass
+    return False
+
+
+if process_is_running('producer.py'):
+    print('Found another instance, exiting...')
+    exit()
 
 topic = "obs-stream"
 brokers = ['10.0.0.7:9092','10.0.0.9:9092','10.0.0.11:9092']
@@ -36,10 +55,12 @@ f &= ('size', '5000')
 f &= ('timestamp', 'gt', prev_record_timestamp)
 f &= ('order', 'asc:timestamp')
 
+# Set counter for retrieved pages 
 page_num = 1
 
 # Get observations from AoT
 observations = client.list_observations(filters=f)
+
 # Iterate through records
 try:
     for page in observations:
@@ -63,7 +84,7 @@ try:
 except (Exception, HTTPError) as error:
     print(error)
 finally:
-    # Write latest processed timestamp to file  
+    # Write latest processed timestamp to the file  
     fh = open("state.txt", "w+")
     fh.write(prev_record_timestamp)
     fh.close()
