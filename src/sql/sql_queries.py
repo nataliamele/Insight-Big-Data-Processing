@@ -9,10 +9,19 @@ sensors_table_drop = "DROP TABLE IF EXISTS sensors;"
 # Fact table - streaming data from sensors
 observations_table_create = ("CREATE TABLE IF NOT EXISTS observations (\
                                 ts INT NOT NULL, \
-                                node_id TEXT, \
-                                sensor_path TEXT NOT NULL, \
-                                value_hrf FLOAT \
+                                vsn TEXT, \
+                                sensor_path TEXT NOT NULL, \ 
+                                value_hrf FLOAT, \ 
+                                hrf_unit TEXT, \ 
+                                lat FLOAT, \ 
+                                lon FLOAT, \ 
+                                community_area TEXT \
                             ); ALTER TABLE observations OWNER TO pgadmin; ")
+
+# Create Timescale hypertable from observations table 
+observations_hyper_table_create = (SELECT create_hypertable('observations', 'ts', chunk_time_interval => 1800000);)
+
+
 
 # Dimensions tables - sensors and nodes
 sensors_table_create = ("CREATE TABLE IF NOT EXISTS sensors (\
@@ -26,6 +35,7 @@ sensors_table_create = ("CREATE TABLE IF NOT EXISTS sensors (\
 
 nodes_table_create = ("CREATE TABLE IF NOT EXISTS nodes( \
                       node_id TEXT PRIMARY KEY, \
+                      vsn TEXT, \
                       lat NUMERIC, \
                       lon NUMERIC, \
                       community_area TEXT, \
@@ -44,5 +54,5 @@ nodes_table_insert = ("INSERT INTO nodes(node_id, lat, lon, community_area, desc
                     ON CONFLICT (node_id) DO NOTHING;")
 
 # QUERIES LISTS
-create_table_queries = [observations_table_create, sensors_table_create, nodes_table_create]
+create_table_queries = [observations_table_create, observations_hyper_table_create, sensors_table_create, nodes_table_create]
 drop_table_queries = [observations_table_drop, sensors_table_drop, nodes_table_drop]
