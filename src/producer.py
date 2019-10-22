@@ -1,4 +1,5 @@
 from kafka.producer import KafkaProducer
+from urllib.error import HTTPError
 import sys
 from aot_client import AotClient, F
 import ciso8601
