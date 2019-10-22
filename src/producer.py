@@ -36,11 +36,14 @@ f &= ('size', '5000')
 f &= ('timestamp', 'gt', prev_record_timestamp)
 f &= ('order', 'asc:timestamp')
 
+page_num = 1
+
 # Get observations from AoT
 observations = client.list_observations(filters=f)
 # Iterate through records
 try:
     for page in observations:
+        print(f'Page {page_num}')
         # data_stream = []
         for obs in page.data:
             ts = ciso8601.parse_datetime(obs["timestamp"])
@@ -52,8 +55,10 @@ try:
                             'value_hrf': obs["value"]\
                             }
             producer.send(topic, value=data_stream)
+
         # Block until all the messages have been sent
         producer.flush()
+        page_num += 1
 
 except (Exception, HTTPError) as error:
     print(error)
