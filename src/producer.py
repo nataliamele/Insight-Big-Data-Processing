@@ -87,4 +87,5 @@ finally:
     # Write latest processed timestamp to the file  
     fh = open("state.txt", "w+")
     fh.write(prev_record_timestamp)
+    print(prev_record_timestamp)
     fh.close()
